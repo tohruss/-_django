@@ -54,12 +54,19 @@ class Book(models.Model):
         """
         return self.title
 
-
     def get_absolute_url(self):
         """
         Returns the url to access a particular book instance.
         """
         return reverse('book-detail', args=[str(self.id)])
+
+    def display_genre(self):
+        """
+        Creates a string for the Genre. This is required to display genre in Admin.
+        """
+        return ', '.join([ genre.name for genre in self.genre.all()[:3] ])
+    display_genre.short_description = 'Genre'
+
 
 class BookInstance(models.Model):
     """
@@ -104,9 +111,16 @@ class Author(models.Model):
         """
         return reverse('author-detail', args=[str(self.id)])
 
-
     def __str__(self):
         """
         String for representing the Model object.
         """
         return '%s, %s' % (self.last_name, self.first_name)
+
+    def display_books(self):
+        """
+        Создает строку для книг, написанных автором.
+        Это необходимо для отображения книг в режиме администратора или других представлениях.
+        """
+        return ', '.join([book.title for book in Book.objects.filter(author=self)[:3]])
+    display_books.short_description = 'Books'
