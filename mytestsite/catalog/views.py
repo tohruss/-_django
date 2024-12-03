@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Book, BookInstance, Author, Genre
+from django.views import generic
 
 def index(request):
     """
@@ -25,4 +26,24 @@ def index(request):
             'num_genres': num_genres,
         },
     )
+
+class BookListView(generic.ListView):
+    model = Book
+    paginate_by = 2
+    def get_queryset(self):
+            return Book.objects.filter(title__icontains='')[:5] # Получить 5 книг, содержащих '' в заголовке
+
+
+
+class BookDetailView(generic.DetailView):
+    model = Book
+
+class AuthorListView(generic.ListView):
+    model = Author
+    paginate_by = 1
+    def get_queryset(self):
+            return Author.objects.all()
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
 

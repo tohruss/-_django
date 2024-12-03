@@ -106,15 +106,8 @@ class Author(models.Model):
     date_of_death = models.DateField('Died', null=True, blank=True)
 
     def get_absolute_url(self):
-        """
-        Returns the url to access a particular author instance.
-        """
         return reverse('author-detail', args=[str(self.id)])
-
     def __str__(self):
-        """
-        String for representing the Model object.
-        """
         return '%s, %s' % (self.last_name, self.first_name)
 
     def display_books(self):
@@ -124,3 +117,6 @@ class Author(models.Model):
         """
         return ', '.join([book.title for book in Book.objects.filter(author=self)[:3]])
     display_books.short_description = 'Books'
+
+    class Meta:
+        ordering = ['last_name']
