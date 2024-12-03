@@ -1,0 +1,20 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Все взятые напрокат книги</h1>
+
+    {% if object_list %}
+    <ul>
+        {% for bookinst in object_list %}
+        <li>
+            <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title }}</a>(Должен вернуть: {{ bookinst.due_back }}) - {{ bookinst.borrower.get_username }}
+        </li>
+        {% if perms.catalog.can_mark_returned %}-
+            <a href="{% url 'renew-book-librarian' bookinst.id %}">Возобновить</a>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>На данный момент книг в выдаче нет.</p>
+    {% endif %}
+{% endblock %}

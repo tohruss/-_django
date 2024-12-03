@@ -1,6 +1,6 @@
 from . import views
 from django.urls import re_path
-from .views import BBLogoutView, BBLoginView
+from .views import BBLogoutView, BBLoginView, AllLoanedBooksListView
 
 urlpatterns = [
     re_path(r'^$', views.index, name='index'),
@@ -11,4 +11,12 @@ urlpatterns = [
     re_path(r'accounts/login/$', BBLoginView.as_view(), name='login'),
     re_path(r'accounts/logout/$',BBLogoutView.as_view(), name='logout'),
     re_path(r'^mybooks/$', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
+    re_path(r'^all-loaned-books/$', AllLoanedBooksListView.as_view(), name='all_borrowed_books'),
+    re_path(r'^book/(?P<pk>[-\w]+)/renew/$', views.renew_book_librarian, name='renew-book-librarian'),
+    re_path(r'^author/create/$', views.AuthorCreate.as_view(), name='author_create'),
+    re_path(r'^author/(?P<pk>\d+)/update/$', views.AuthorUpdate.as_view(), name='author_update'),
+    re_path(r'^author/(?P<pk>\d+)/delete/$', views.AuthorDelete.as_view(), name='author_delete'),
+    re_path(r'^book/create/$', views.BookCreate.as_view(), name='book_create'),
+    re_path(r'^book/(?P<pk>\d+)/update/$', views.BookUpdate.as_view(), name='book_update'),
+    re_path(r'^book/(?P<pk>\d+)/delete/$', views.BookDelete.as_view(), name='book_delete'),
 ]
