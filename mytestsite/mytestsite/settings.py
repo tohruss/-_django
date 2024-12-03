@@ -26,6 +26,8 @@ SECRET_KEY = 'django-insecure-wg@k5vc-94lvvqk3d65(6ge4gqfok83jeyuxtejl+m_sh2kn7x
 DEBUG = True #Должен изнаально быть тру
 
 ALLOWED_HOSTS = []
+LOGIN_REDIRECT_URL = '/'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Application definition
@@ -56,7 +58,7 @@ ROOT_URLCONF = 'mytestsite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

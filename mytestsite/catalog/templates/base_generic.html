@@ -21,9 +21,23 @@
         <div class="col-sm-2">
           {% block sidebar %}
             <ul class="sidebar-nav">
-              <li><a href="{% url 'index' %}">Home</a></li>
-              <li><a href="{% url 'books' %}">All books</a></li>
-              <li><a href="{% url 'authors' %}">All authors</a></li>
+              <li><a href="{% url 'index' %}">Главная</a></li>
+              <li><a href="{% url 'books' %}">Все книги</a></li>
+              <li><a href="{% url 'authors' %}">Все авторы</a></li>
+            {% if user.is_authenticated %}
+              <li>Пользователь: {{ user.get_username }}</li>
+              <li><a href="{% url 'my-borrowed' %}">Мои задолжности</a></li>
+              <li><form action="{% url 'logout'%}?next={{request.path}}" method="post">
+                  {% csrf_token %}
+                  <button class="dropdown-item" type="submit">Выйти</button>
+                  </form>
+              </li><br>
+            {% else %}
+              <form action="{% url 'login' %}" method="post">
+              {% csrf_token %}
+              <button class="dropdown-item" type="submit">Войти</button>
+              </form>
+            {% endif %}
             </ul>
           {% endblock %}
         </div>

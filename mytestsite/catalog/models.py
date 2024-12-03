@@ -1,26 +1,8 @@
 from django.db import models
 from django.urls import reverse
 import uuid
-
-class MyModelName(models.Model):
-    """Типичный класс модели, производный от класса Model."""
-
-    # Поля
-    my_field_name = models.CharField(max_length=20, help_text='Введите описание поля')
-    # …
-
-    # Метаданные
-    class Meta:
-        ordering = ['-my_field_name']
-
-    # Methods
-    def get_absolute_url(self):
-        """Возвращает URL-адрес для доступа к определенному экземпляру MyModelName."""
-        return reverse('model-detail-view', args=[str(self.id)])
-
-    def __str__(self):
-        """Строка для представления объекта MyModelName (например, в административной панели и т.д.)."""
-        return self.my_field_name
+from django.contrib.auth.models import User
+from datetime import date
 
 class Genre(models.Model):
     """
@@ -77,6 +59,9 @@ class BookInstance(models.Model):
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
 
+    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+
     LOAN_STATUS = (
         ('m', 'Maintenance'),
         ('o', 'On loan'),
@@ -86,15 +71,23 @@ class BookInstance(models.Model):
 
     status = models.CharField(max_length=1, choices=LOAN_STATUS, blank=True, default='m', help_text='Book availability')
 
-    class Meta:
-        ordering = ["due_back"]
-
-
     def __str__(self):
         """
         String for representing the Model object
         """
         return '%s (%s)' % (self.id,self.book.title)
+
+    @property
+    def is_overdue(self):
+        if self.due_back and date.today() > self.due_back:
+            return True
+        return False
+
+    class Meta:
+        ordering = ["due_back"]
+
+        permissions = (("can_mark_returned", "Set book as returned"),)
+
 
 class Author(models.Model):
     """
