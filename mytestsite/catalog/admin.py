@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Author, Genre, Book, BookInstance
+from .models import Author, Genre, Book, BookInstance, Publisher
 
 #admin.site.register(Book)
 #admin.site.register(Author)
@@ -18,9 +18,15 @@ admin.site.register(Author, AuthorAdmin)
 # Register the Admin classes for Book using the decorator
 class BooksInstanceInline(admin.TabularInline):
     model = BookInstance
+
+
+@admin.register(Publisher)
+class PublisherAdmin(admin.ModelAdmin):
+    list_display = ('name', 'city')  # Указываем поля для отображения в списке
+
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'display_genre')
+    list_display = ('title', 'author', 'display_genre', 'publisher')
     inlines = [BooksInstanceInline]
 
 
@@ -38,4 +44,5 @@ class BookInstanceAdmin(admin.ModelAdmin):
             'fields': ('status', 'due_back','borrower')
         }),
     )
+
 

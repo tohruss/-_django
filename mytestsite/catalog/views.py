@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Book, BookInstance, Author, Genre
+from .models import BookInstance, Genre
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import LogoutView, LoginView
